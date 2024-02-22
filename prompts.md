@@ -93,3 +93,103 @@ Considerations:
 Ensure that the documentation is non-technical user-friendly, avoiding unnecessary jargon and technical details that could overwhelm or confuse the end user.
 The manual should be engaging and encourage the user to explore all features of the software, enhancing their user experience and satisfaction.
 ```
+
+# Technical Documentation (Developers, Testers, System Administrators)
+1. Architecture Documentation: Describes the software architecture, including components and their interactions, for developers and architects.
+```
+Given an input code file, generate comprehensive Architecture and Technical Documentation. The documentation should be divided into two main sections: Architecture Documentation and Technical Documentation. Each section should cater to its respective audience—developers, testers, and system administrators—with the aim of providing a deep understanding of the software's structure, components, interactions, and operational guidelines.
+
+1. Architecture Documentation:
+
+Overview: Begin with a high-level overview of the software system. Describe its purpose, scope, and the primary problem it solves.
+Components: Break down the software into its core components. For each component, provide:
+A brief description.
+Its role within the overall system.
+Key functionalities.
+Interaction with other components.
+Interactions: Detail the interactions between components. Use diagrams if possible to illustrate data flow, control flow, and dependencies.
+Design Patterns: Identify any design patterns used in the software. Explain why they were chosen and how they are implemented.
+Technology Stack: List the technologies used (programming languages, frameworks, libraries) and justify their selection.
+Scalability and Performance: Discuss the software's scalability. Include information on load balancing, caching strategies, and database optimization.
+2. Technical Documentation for Different Audiences:
+
+Developers:
+
+Detailed Component Guide: Provide in-depth information on each component's internal structure, including class hierarchies, interfaces, and algorithms.
+Development Environment Setup: Guide on setting up the development environment, including required software, version control systems, and build instructions.
+Coding Standards: Outline coding standards and best practices to ensure consistency and maintainability.
+Testing Guidelines: Detail the testing framework, writing and running tests, and interpreting results.
+Testers:
+
+Testing Environment Setup: Instructions for setting up the testing environment.
+Test Cases: Describe how to create effective test cases, including unit, integration, and system tests.
+Automated Testing: Guide on automated testing tools and scripts.
+Bug Reporting: Procedures for reporting bugs, including the format and channels to use.
+System Administrators:
+
+Deployment Guide: Instructions for deploying the software, including prerequisites, deployment steps, and post-deployment verification.
+Configuration: Details on configuring the software, including environment variables, configuration files, and customization options.
+Monitoring and Maintenance: Guidelines for monitoring software performance, interpreting logs, and conducting routine maintenance.
+Security: Security best practices, including access control, data encryption, and vulnerability management.
+Closing:
+
+Conclude with a Q&A section addressing common questions for each audience type. Include contact information for further queries and a glossary of terms for quick reference.
+
+Ensure that the documentation is clear, concise, and organized, with examples where necessary to elucidate complex concepts. Use diagrams and tables to enhance understanding and readability. The goal is to provide a comprehensive resource that aids in the development, testing, and administration of the software system.
+```
+2. Code Documentation: In-line comments and documentation within the codebase for developers.
+```
+Objective: Generate comprehensive technical documentation based on the provided code file. The documentation should be tailored to three distinct audiences: Developers, Testers, and System Administrators. The output should include in-line comments and documentation relevant to these groups but exclude the actual code.
+
+Input: A code file is provided as input. This file contains source code written in [Specify Programming Language, e.g., Python, JavaScript, etc.]. The code encompasses several functions, classes, and modules designed to [Briefly describe the purpose of the code, e.g., handle user authentication, perform data analysis, etc.].
+
+Task Details:
+
+Code Analysis: Begin by analyzing the provided code. Identify key functionalities, algorithms, data structures, and any external libraries or dependencies used in the code.
+
+In-line Comments and Documentation:
+
+Generate detailed in-line comments for each significant block of code. These comments should explain what the code does, any algorithms or logic it employs, and the purpose of major variables and functions.
+Include explanations for any complex or non-obvious parts of the code, ensuring clarity for future developers who may work on or maintain this codebase.
+Technical Documentation Sections:
+
+For Developers: Create documentation that includes a comprehensive overview of the codebase, setup instructions, API references, and guidelines for contributing to the code. Highlight development best practices observed in the code, and provide examples of how to extend or modify functionalities.
+
+For Testers: Focus on how to set up the environment for testing, describe testing strategies suitable for the code, and outline how to report bugs or issues effectively. Include specific sections on unit testing, integration testing, and any automated tests that are part of the codebase.
+
+For System Administrators: Write documentation detailing the deployment process, including any environment setup, configurations needed, and how to troubleshoot common issues during deployment. Also, include monitoring and maintenance guidelines, emphasizing how to ensure the system's reliability and performance.
+
+Output Format: The documentation should be structured with clear headings, subheadings, and bullet points for ease of reading. Use markdown or a similar formatting style to organize the documentation logically.
+
+Additional Instructions:
+
+Assume the reader has a basic understanding of the programming language and general software development concepts.
+Avoid technical jargon where possible, or provide definitions and explanations for terms that might be unfamiliar to the target audience.
+Ensure the documentation is concise, clear, and actionable, enabling each audience to effectively understand and use the information provided.
+
+```
+
+# Product Documentation (Stakeholders, Marketing Teams, Support Teams)
+1. Product Overviews: High-level descriptions of the software, its benefits, and use cases.
+```
+You have been provided with a source code file from a software development project. This file includes various functions, classes, and comments that detail the functionality, purpose, and implementation details of a specific software application. Your task is to analyze the content of this file to generate comprehensive product overviews tailored to different audiences: stakeholders, marketing teams, and support teams.
+
+For each audience, provide a high-level description of the software that covers the following aspects:
+
+Overview: A brief introduction to the software, including its name, purpose, and the primary problem it solves.
+
+Benefits: Highlight the key benefits of using the software. Focus on aspects such as efficiency improvements, cost savings, scalability, reliability, and user experience enhancements.
+
+Use Cases: Describe typical scenarios or use cases where the software can be applied. Include examples that resonate with the audience's interests and challenges.
+
+Technical Highlights: Without delving deep into technical jargon, mention any noteworthy technical features or innovations that distinguish this software from competitors. Tailor the complexity of this information to suit the audience's technical background.
+
+Integration and Compatibility: Briefly touch on how the software integrates with other systems or platforms and its compatibility with existing workflows or technologies, if relevant.
+
+Ensure that your descriptions for each audience are framed appropriately:
+
+For Stakeholders, emphasize strategic advantages, ROI, and long-term vision.
+For Marketing Teams, focus on market differentiators, customer benefits, and potential for creating compelling marketing messages.
+For Support Teams, provide insights into common use cases, troubleshooting tips, and how the software addresses typical customer queries or issues.
+Please use clear, concise language and avoid technical complexities when not addressing the support team. Your goal is to make the software's value proposition evident to each audience based on their unique perspectives and priorities.
+```
