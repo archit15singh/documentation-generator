@@ -176,6 +176,48 @@ def write_content_to_file(file_path: Path, content: str, suffix: str):
         file.write(content)
     print(f"Content written to {new_file_path}")
 
+
+def remove_markdown_code_blocks(content):
+    """
+    Removes the markdown code block syntax from the content.
+
+    :param content: The content of a markdown file as a string.
+    :return: The content with the markdown code block syntax removed.
+    """
+    return content.replace("```markdown", "").replace("```", "").strip()
+
+def append_content_to_master(master_path, content):
+    """
+    Appends the given content to the master document.
+
+    :param master_path: The path to the master document.
+    :param content: The content to append to the master document.
+    """
+    with open(master_path, 'a', encoding='utf-8') as master_file:
+        master_file.write(content + "\n\n")
+
+def process_markdown_files(folder_path, master_document_path):
+    """
+    Processes all markdown files in the given folder (and subfolders), removing the specific
+    markdown code block syntax and appending their content along with the file path to a master document.
+
+    :param folder_path: The path to the folder containing markdown files.
+    :param master_document_path: The path to the master document to append contents to.
+    """
+    folder_path = Path(folder_path)
+    master_document_path = Path(master_document_path)
+
+    # Ensure the master document is empty before starting
+    master_document_path.write_text('')
+
+    for md_file in folder_path.rglob('*.md'):
+        content = md_file.read_text(encoding='utf-8')
+        content = remove_markdown_code_blocks(content)
+        file_info_and_content = f"File Path: {md_file}\n\n{content}\n\n---\n\n"
+        append_content_to_master(master_document_path, file_info_and_content)
+
+    print(f"All markdown files have been processed and appended to {master_document_path}")
+
 def main(target_project):
     """
     Main function to initiate the API call and process the response.
@@ -216,5 +258,8 @@ def main(target_project):
 if __name__ == "__main__":
     target_project = '/workspaces/documentation-generator/target_code/prompttools'
     main(target_project)
+    folder_path = '/workspaces/documentation-generator/generated_documentation/prompttools'
+    master_document_path = '/workspaces/documentation-generator/prompttools.md'
+    process_markdown_files(folder_path, master_document_path)
     total_estimated_cost = sum(cost_estimates)
     print(f"Total Estimated Cost: ${total_estimated_cost:.4f}")
