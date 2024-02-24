@@ -15,6 +15,8 @@ AZURE_OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY")
 AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT")
 COST_PER_THOUSAND_TOKENS = 0.01
+# Global list to store cost estimates
+cost_estimates = []
 
 def estimate_cost(total_tokens):
     """
@@ -23,7 +25,10 @@ def estimate_cost(total_tokens):
     :param total_tokens: Number of tokens used in the response.
     :return: Estimated cost.
     """
-    return (total_tokens / 1000) * COST_PER_THOUSAND_TOKENS
+    estimated_cost = (total_tokens / 1000) * COST_PER_THOUSAND_TOKENS
+    cost_estimates.append(estimated_cost)
+    print(f"Total Estimated Cost: ${sum(cost_estimates):.4f}")
+    return estimated_cost
 
 def print_response(response):
     """
@@ -171,7 +176,7 @@ def write_content_to_file(file_path: Path, content: str, suffix: str):
         file.write(content)
     print(f"Content written to {new_file_path}")
 
-def main():
+def main(target_project):
     """
     Main function to initiate the API call and process the response.
     """
@@ -194,7 +199,6 @@ def main():
         api_version=AZURE_OPENAI_API_VERSION,
     )
 
-    target_project = '/workspaces/documentation-generator/target_code/pilot'
     file_paths = iterate_files(target_project, '.py')
     
     for file_path in tqdm(file_paths):
@@ -210,4 +214,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    target_project = '/workspaces/documentation-generator/target_code/prompttools'
+    main(target_project)
+    total_estimated_cost = sum(cost_estimates)
+    print(f"Total Estimated Cost: ${total_estimated_cost:.4f}")
