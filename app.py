@@ -1,7 +1,10 @@
+from typing import List
 import os
 import json
 from dotenv import load_dotenv
 from openai import AzureOpenAI
+from pathlib import Path
+from tqdm import tqdm
 
 # Load environment variables
 load_dotenv()
@@ -72,10 +75,115 @@ def make_openai_call(client, messages, json_response=False):
     print_response(response)
     return response.choices[0].message.content
 
+
+def iterate_files(directory, suffix):
+    base_path = Path(directory)
+    file_paths = []  # Initialize an empty list to store file paths
+    for file in base_path.rglob('*' + suffix):  # Filter files by suffix
+        if file.is_file():
+            file_paths.append(file)  # Add the file path to the list
+    return file_paths
+
+def update_file_path(file_path: Path, old_segment: str, new_segment: str) -> Path:
+    """
+    Update a file path by replacing the old segment with a new segment.
+
+    :param file_path: The original file path as a PosixPath object.
+    :param old_segment: The path segment to be replaced.
+    :param new_segment: The new path segment to replace the old one.
+    :return: The updated file path as a PosixPath object.
+    """
+    # Convert the PosixPath to a string and replace the target substring
+    new_str_path = str(file_path).replace(old_segment, new_segment)
+    
+    # Convert back to PosixPath
+    updated_path = Path(new_str_path)
+    
+    return updated_path
+
+def get_ai_response(client, prompt):
+    """
+    Fetches a response from the AI based on system instructions and a user question.
+
+    :param client: The OpenAI client or equivalent API client instance.
+    :param system_instruction: Instructions or context provided to the AI.
+    :param question: The user's question to the AI.
+    :return: The AI's response.
+    """
+    messages = [
+        {"role": "user", "content": prompt},
+    ]
+
+    response = make_openai_call(client, messages)
+    print("prompt:", prompt)
+    print("Response:", response)
+    return response
+
+def create_folder_for_path(file_path: Path):
+    """
+    Ensures that the directory for a given file path is created if it doesn't already exist.
+
+    :param file_path: The file path as a PosixPath object.
+    """
+    # Get the parent directory of the current path
+    directory = file_path.parent
+    
+    # Create the directory if it doesn't exist
+    directory.mkdir(parents=True, exist_ok=True)
+
+def prepend_title_to_file_content(file_path):
+    """
+    Reads a file's content and prepends the file name as a title to it, then returns the modified content.
+
+    :param file_path: The path to the file whose content is to be read.
+    :return: A string containing the file name as a title followed by the original file content.
+    """
+    # Extract the file name to use as a title
+    title = str(Path(file_path))
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        
+        # Prepend the file name as a title to the content
+        modified_content = title + '\n\n' + content  # Adding two newlines as a separator
+        
+        return modified_content
+    except FileNotFoundError:
+        return "File not found."
+
+def write_content_to_file(file_path: Path, content: str, suffix: str):
+    """
+    Writes the given content to a file at the specified path with a new suffix, ensuring that the directory exists.
+
+    :param file_path: The original path to the file where content will be written.
+    :param content: The content to write to the file.
+    :param suffix: The new file suffix (extension) to apply to the file path.
+    """
+    # Ensure the parent directory exists
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Modify the file path to use the new suffix
+    new_file_path = file_path.with_suffix(suffix)
+
+    # Write the content to the file with the new suffix
+    with new_file_path.open('w', encoding='utf-8') as file:
+        file.write(content)
+    print(f"Content written to {new_file_path}")
+
 def main():
     """
     Main function to initiate the API call and process the response.
     """
+    documentation_task_description = """
+    Your task is to write a very detailed technical description of what this file does and how it is used in the project.
+    Do not add any preamble or conclusion to your response, respond with only the detailed technical documentation and description in markdown format.
+    Think step by step.
+
+    Input code file: 
+    {}
+    """
+
     if not all([AZURE_OPENAI_API_VERSION, AZURE_OPENAI_KEY, AZURE_OPENAI_ENDPOINT]):
         print("Missing required environment variables.")
         return
@@ -86,12 +194,20 @@ def main():
         api_version=AZURE_OPENAI_API_VERSION,
     )
 
-    system_instructions = "you are an ai assistant"
-    question = "who are you?"
-    messages = [{"role": "system", "content": system_instructions}, {"role": "user", "content": question}]
+    target_project = '/workspaces/documentation-generator/target_code/pilot'
+    file_paths = iterate_files(target_project, '.py')
+    
+    for file_path in tqdm(file_paths):
+        print("*" * 100)
+        print(f"running for file path: {file_path}")
+        file_content = prepend_title_to_file_content(file_path)
+        print(f"length of content: {len(file_content)}")
+        documentation = get_ai_response(client=client, prompt=documentation_task_description.format(file_content))
+        updated_path = update_file_path(file_path, 'target_code', 'generated_documentation')
+        create_folder_for_path(updated_path)
+        write_content_to_file(updated_path, documentation, '.md')
 
-    response = make_openai_call(client, messages)
-    print("Response:", response)
+
 
 if __name__ == "__main__":
     main()
