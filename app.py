@@ -256,10 +256,10 @@ def main(target_project):
 
 
 if __name__ == "__main__":
-    target_project = '/workspaces/documentation-generator/target_code/prompttools'
+    target_project = '/workspaces/documentation-generator/target_code/dataherald'
     main(target_project)
-    folder_path = '/workspaces/documentation-generator/generated_documentation/prompttools'
-    master_document_path = '/workspaces/documentation-generator/prompttools.md'
+    folder_path = '/workspaces/documentation-generator/generated_documentation/dataherald'
+    master_document_path = '/workspaces/documentation-generator/dataherald.md'
     process_markdown_files(folder_path, master_document_path)
     total_estimated_cost = sum(cost_estimates)
     print(f"Total Estimated Cost: ${total_estimated_cost:.4f}")
